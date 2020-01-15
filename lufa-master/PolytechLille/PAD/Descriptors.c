@@ -104,6 +104,7 @@ const USB_Descriptor_Configuration_t PROGMEM RelayBoard_ConfigurationDescriptor 
 			.InterfaceStrIndex      = NO_DESCRIPTOR
 		},
 	
+	/*
 	.HID_KeyboardHID =
 		{
 			.Header                 = {.Size = sizeof(USB_HID_Descriptor_HID_t), .Type = HID_DTYPE_HID},
@@ -114,6 +115,7 @@ const USB_Descriptor_Configuration_t PROGMEM RelayBoard_ConfigurationDescriptor 
 			.HIDReportType          = HID_DTYPE_Report,
 			.HIDReportLength        = sizeof(KeyboardReport)
 		},
+	*/
 	
 	.ReportOUTEndpoint =
 		{
@@ -147,17 +149,17 @@ const USB_Descriptor_Configuration_t PROGMEM RelayBoard_ConfigurationDescriptor 
 		{
 			.Header                 = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
 
-			.EndpointAddress        = KEYBOARD_IN_EPADDR,
+			.EndpointAddress        = KEYBOARD_IN_Bout_EPADDR,
 			.Attributes             = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
 			.EndpointSize           = KEYBOARD_EPSIZE,
 			.PollingIntervalMS      = 0x05
 		},
 
-	.ReportINEndpointJoysticks =
+	.ReportINEndpointJoystick =
 		{
 			.Header                 = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
 
-			.EndpointAddress        = KEYBOARD_IN_EPADDR,
+			.EndpointAddress        = KEYBOARD_IN_Joy_EPADDR,
 			.Attributes             = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
 			.EndpointSize           = KEYBOARD_EPSIZE,
 			.PollingIntervalMS      = 0x05
