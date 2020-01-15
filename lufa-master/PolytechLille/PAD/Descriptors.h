@@ -51,7 +51,13 @@
 			USB_Descriptor_Configuration_Header_t Config;
 
 			// Relay Board Interface
-			USB_Descriptor_Interface_t            RelayBoardInterface;
+			USB_Descriptor_Interface_t            InterfaceOUT;
+			//USB_HID_Descriptor_HID_t              HID_KeyboardHID;				//UTILE ?
+			USB_Descriptor_Endpoint_t             HID_ReportOUTEndpoint;
+			
+			USB_Descriptor_Interface_t            InterfaceIN;
+			USB_Descriptor_Endpoint_t             HID_ReportINEndpointBoutons;
+			USB_Descriptor_Endpoint_t             HID_ReportOUTEndpointJoystick;
 		} USB_Descriptor_Configuration_t;
 
 		/** Enum for the device interface descriptor IDs within the device. Each interface descriptor
@@ -60,8 +66,8 @@
 		 */
 		enum InterfaceDescriptors_t
 		{
-			INTERFACE_ID_InterfaceOUT = 0,
-            INTERFACE_ID_InterfaceIN = 1,/**< Relay board interface descriptor ID */
+			INTERFACE_ID_InterfaceOUT = 0, /**< Relay board interface descriptor ID */
+			INTERFACE_ID_InterfaceIN = 1,
 		};
 
 		/** Enum for the device string descriptor IDs within the device. Each string descriptor should
@@ -76,9 +82,24 @@
 			STRING_ID_Serial       = 3, /**< Serial number string ID */
 		};
 
+	/* Macros: */
+	
+	
+		/** Endpoint address of the Keyboard HID reporting IN endpoint. */
+		#define KEYBOARD_IN_Bout_EPADDR        (ENDPOINT_DIR_IN  | 1)		//Adr. EP Boutons
+		#define KEYBOARD_IN_Joy_EPADDR        (ENDPOINT_DIR_IN  | 1)		//Adr. EP Joystick
+
+		/** Endpoint address of the Keyboard HID reporting OUT endpoint. */
+		#define KEYBOARD_OUT_EPADDR       (ENDPOINT_DIR_OUT | 2)
+		
+		/** Size in bytes of the Keyboard HID reporting IN and OUT endpoints. */
+		#define KEYBOARD_EPSIZE           8
+
+
 	/* Function Prototypes: */
 		uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
 		                                    const uint16_t wIndex,
 		                                    const void** const DescriptorAddress)
 		                                    ATTR_WARN_UNUSED_RESULT ATTR_NON_NULL_PTR_ARG(3);
 #endif
+

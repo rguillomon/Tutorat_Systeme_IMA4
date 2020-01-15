@@ -45,20 +45,19 @@
 
 		#include "Descriptors.h"
 
-		#include <LUFA/Drivers/Board/LEDs.h>
+		//#include <LUFA/Drivers/Board/LEDs.h>
+		#include "LUFA/Drivers/PeripheralSerial.h"
 		#include <LUFA/Drivers/USB/USB.h>
 		#include <LUFA/Platform/Platform.h>
 
 	/* Macros: */
-		#define RELAY1      (1 << 7)
-		#define RELAY2      (1 << 6)
-		#define RELAY3      (1 << 5)
-		#define RELAY4      (1 << 4)
-		#define ALL_RELAYS  (RELAY1 | RELAY2 | RELAY3 | RELAY4)
+		
 
 	/* Function Prototypes: */
 		void SetupHardware(void);
-
+		void EVENT_USB_Device_ConfigurationChanged(void);
+		void SendNextReport(void);
+		void ReceiveNextReport(void);
 		void EVENT_USB_Device_ControlRequest(void);
 
 #endif
