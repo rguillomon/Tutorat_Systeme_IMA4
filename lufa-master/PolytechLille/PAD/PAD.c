@@ -124,7 +124,7 @@ void SendNextReport(void)		//Envoi liaison Série
 	}
 	
 	
-	/** Envoi sur INTERFACE BOUTONS**/
+	/** Envoi sur EP BOUTONS**/
 	/* Select the Keyboard Report Endpoint */
 	Endpoint_SelectEndpoint(KEYBOARD_IN_Bout_EPADDR);
 
@@ -141,7 +141,7 @@ void SendNextReport(void)		//Envoi liaison Série
 		Endpoint_ClearIN();
 	}
 	
-		/** Envoi sur INTERFACE Joystick**/
+		/** Envoi sur EP Joystick**/
 	/* Select the Keyboard Report Endpoint */
 	Endpoint_SelectEndpoint(KEYBOARD_IN_Joy_EPADDR);
 
