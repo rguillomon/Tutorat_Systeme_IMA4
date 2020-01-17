@@ -64,14 +64,13 @@ if(value==0) PORTB &= 0xfe; else PORTB |= 0x01;
 void input_init(void){
 	DDRD &= 0b10000011;	// PIN 2-6 as input (Bouton Joystick + boutons)
 	PORTD |= 0x7C; // Pull up de 0 à 1
-	//DDRC &= 0b11111100;	// PIN 0-1 analogiques comme input (x et y joystick)
 }
 
-
+/*
 unsigned char input_get(void){
 return ((PIND&0x04)!=0)?1:0;
 }
-
+*/
 
 /* Commande des LED */
 void commande_leds(){
@@ -99,7 +98,6 @@ void commande_leds(){
 
 /* Récupération de la valeur des boutons et mise en forme */
 unsigned char get_buttons(void){
-	//unsigned char boutons = (((PIND & 0x7C)>>2) &0x3f) | 0b00100000;
 	unsigned char boutons = PIND;
 	boutons = boutons >>2;
 	boutons = boutons & 0b00111111;
@@ -110,8 +108,7 @@ unsigned char get_buttons(void){
 
 /* Met en forme l'octet de l'axe pos du joystick */
 unsigned char shape_joy(unsigned char pos){
-	//pos = ((pos >> 3) | &0b00111111) 0b00100000;
-	pos = pos >>3;
+	pos = pos >>3;	//On récupère les 5 bits de poids forts de l'ADCH (diminuer sensibilité)
 	pos = pos & 0b00111111;
 	pos = pos | 0b00100000;
 	return pos;
@@ -153,32 +150,23 @@ int main(void){
   	joystick_x = get_joystick(0);
   	_delay_ms(tempo);
   	joystick_y = get_joystick(1);
-    
     	
     //Port série libre
     if ((UCSR0A & (1<<RXC0)) == 0){
-    	
-    	//if (boutons_anc != boutons){
-    	//if (joystick_x_anc != joystick_x){
-    	//if (joystick_y_anc != joystick_y){
+    	// Si une des grandeurs a changé
     	if ((boutons_anc != boutons) || (joystick_x_anc != joystick_x) || (joystick_y_anc != joystick_y)){
-    		send_serial(boutons);
-    		//if ((joystick_x > 126) || (joystick_x <33)) send_serial('e');
+    		send_serial(boutons);	//on envoie l'état global des grandeurs
       	send_serial(joystick_x);
-      	send_serial(joystick_y);
-      	
-      	//send_serial('r');
-    	  	
+      	send_serial(joystick_y);    	  	
       	//retour chariot
       	send_serial(0x0a);
       	send_serial(0x0d);
 			}
-			
 		}
 		
 		//Port série occupé	
 		else{
-		commande_leds();
+		commande_leds();	//On gère la commande des leds
 		}
   }  
 	return 0;
