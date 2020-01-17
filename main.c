@@ -1,8 +1,11 @@
 #include <avr/io.h>		// for the input/output register
+#include <util/delay.h>
 
 // For the serial port
 
 #define CPU_FREQ        16000000L       // Assume a CPU frequency of 16Mhz
+#define tempo						25
+#define debit						9600						//débit liaison série en bauds 
 
 void init_serial(int speed)
 {
@@ -49,23 +52,26 @@ return ADCH;
 
 // For the I/O 
 void output_init(void){
-DDRB |= 0b00111111; // PIN 8-13 as output
-}
-
-void output_set(unsigned char value){
-if(value==0) PORTB &= 0xfe; else PORTB |= 0x01;
-}
-
-void input_init(void){
-DDRD |= 0b01111100;  // PIN 2-6 as input (Bouton Joystick + boutons)
-DDRC |= 0x03;		// PIN 0-1 analogiques comme input (x et y joystick analogique)
+DDRB |= 0b00111111; // PIN 8-13 as output (LED)
 }
 
 /*
+void output_set(unsigned char value){
+if(value==0) PORTB &= 0xfe; else PORTB |= 0x01;
+}
+*/
+
+void input_init(void){
+	DDRD &= 0b10000011;	// PIN 2-6 as input (Bouton Joystick + boutons)
+	PORTD |= 0x7C; // Pull up de 0 à 1
+	//DDRC &= 0b11111100;	// PIN 0-1 analogiques comme input (x et y joystick)
+}
+
+
 unsigned char input_get(void){
 return ((PIND&0x04)!=0)?1:0;
 }
-*/
+
 
 /* Commande des LED */
 void commande_leds(){
@@ -92,84 +98,89 @@ void commande_leds(){
 }
 
 /* Récupération de la valeur des boutons et mise en forme */
-int get_buttons(void){
-	unsigned boutons = ((PIND & 0x7C)>>2) | 0b00100000;
-	return(boutons);
+unsigned char get_buttons(void){
+	//unsigned char boutons = (((PIND & 0x7C)>>2) &0x3f) | 0b00100000;
+	unsigned char boutons = PIND;
+	boutons = boutons >>2;
+	boutons = boutons & 0b00111111;
+	boutons = boutons | 0b00100000;
+	
+	return boutons;
 }
 
 /* Met en forme l'octet de l'axe pos du joystick */
-int shape_joy(unsigned char pos){
-	pos = (pos >> 3) | 0b00100000;
-	return(pos);
+unsigned char shape_joy(unsigned char pos){
+	//pos = ((pos >> 3) | &0b00111111) 0b00100000;
+	pos = pos >>3;
+	pos = pos & 0b00111111;
+	pos = pos | 0b00100000;
+	return pos;
 }
 
 /* Récupération de la valeur de l'axe du joystick sur la chaîne channel du CAN */
-int get_joystick(int channel){
+unsigned char get_joystick(int channel){
 	  unsigned char axis;
 	  ad_init(channel);
     axis = ad_sample();
-    shape_joy(axis);
-    return(axis);
+    axis = shape_joy(axis);
+    return axis;
 }
 
 /* Dummy main */
 int main(void){
-  init_serial(9600);
+
+	//INITIALISATIONS  
+  unsigned char boutons, boutons_anc;
+  unsigned char joystick_x=0x10, joystick_x_anc=0x10;
+  unsigned char joystick_y=0x10, joystick_y_anc=0x10;
+  
+  init_serial(debit);
   output_init();
   input_init();
-  
-  unsigned char boutons, boutons_anc;
-  unsigned char joystick_x, joystick_x_anc;
-  unsigned char joystick_y, joystick_y_anc;
 
 	//Récupération des valeurs des boutons et joystick, et mise en forme
   boutons = get_buttons();
-  joystick_x = get_joystick(1);
-  joystick_y = get_joystick(0);
-    
-  //send_serial(boutons);
+  joystick_x = get_joystick(0);
+  joystick_y = get_joystick(1);
   
   while(1){
-    
 		boutons_anc = boutons;
 		joystick_x_anc = joystick_x;
 		joystick_y_anc = joystick_y;
     
    	//Récupération des valeurs des boutons et joystick, et mise en forme
   	boutons = get_buttons();
-  	joystick_x = get_joystick(1);
-  	joystick_y = get_joystick(0);
+  	joystick_x = get_joystick(0);
+  	_delay_ms(tempo);
+  	joystick_y = get_joystick(1);
+    
     	
-
-    send_serial(boutons+2);
-    //retour chariot
-    send_serial(0x0a);
-    send_serial(0x0d);
-    	
-    //Cas où aucun caractère n'est reçu
+    //Port série libre
     if ((UCSR0A & (1<<RXC0)) == 0){
     	
     	//if (boutons_anc != boutons){
+    	//if (joystick_x_anc != joystick_x){
     	//if (joystick_y_anc != joystick_y){
-    	//if ((boutons_anc != boutons) || (joystick_x_anc != joystick_x) || (joystick_y_anc != joystick_y)){
-    		//send_serial(boutons);
-      	//send_serial(joystick_y);
-      	//send_serial(joystick_y);
+    	if ((boutons_anc != boutons) || (joystick_x_anc != joystick_x) || (joystick_y_anc != joystick_y)){
+    		send_serial(boutons);
+    		//if ((joystick_x > 126) || (joystick_x <33)) send_serial('e');
+      	send_serial(joystick_x);
+      	send_serial(joystick_y);
       	
       	//send_serial('r');
     	  	
       	//retour chariot
-      	//send_serial(0x0a);
-      	//send_serial(0x0d);
-			//}
-		}
+      	send_serial(0x0a);
+      	send_serial(0x0d);
+			}
 			
+		}
+		
+		//Port série occupé	
 		else{
-		//Cas où un caractère attent d'être reçu
 		commande_leds();
 		}
-  }
- 		  
+  }  
 	return 0;
 }
 
