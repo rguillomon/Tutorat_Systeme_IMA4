@@ -46,7 +46,7 @@
 		#include "Descriptors.h"
 
 		//#include <LUFA/Drivers/Board/LEDs.h>
-		#include "LUFA/Drivers/PeripheralSerial.h"
+		//#include <LUFA/Drivers/PeripheralSerial.h> //inventé?
 		#include <LUFA/Drivers/USB/USB.h>
 		#include <LUFA/Platform/Platform.h>
 
