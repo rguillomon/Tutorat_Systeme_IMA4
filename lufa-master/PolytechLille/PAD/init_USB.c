@@ -93,38 +93,32 @@ void config_periph(){
     for(int num_intf=0;num_intf < config->bNumInterfaces ;num_intf++){
         for(int num_ep=0;num_ep<config->interface[num_intf].altsetting[0].bNumEndpoints ;num_ep++){
             int eptype = config->interface[num_intf].altsetting[0].endpoint->bDescriptorType;
+            
+            // Regarde si les endpoint sont de type interruption.
             if((eptype & 0b11)==LIBUSB_TRANSFER_TYPE_INTERRUPT){ //sauvegarde dans tab_pa du point d'accès qui est une interruption
                 struct EP ep1;
                 
-                
-                
-                /*
-                //LAISSER TOMBER INPUT OUTPUT
+                //met les endpoint dans un tableau en indiquant arbitrairement si on le veut en sortie ou non (voir les struct du début)
                 ep1.ep=config->interface[num_intf].altsetting[0].endpoint.bEndpointAddress;
                 if (num_intf==0){
-                     if (eptype & 0b10000000 == LIBUSB_ENDPOINT_OUT){ 
                          tab_pa.tableau[num_intf].ep=ep1.ep;
                          tab_pa.tableau[num_intf].io=1;
                          tab_pa.dernier++;
-                         break;
-                    }      //sortie => io=1
                 }
                 else{
-                    if (eptype & 0b10000000 == LIBUSB_ENDPOINT_IN) {
+                    
                         tab_pa.tableau[num_intf].ep=ep1.ep;
                         tab_pa.tableau[num_intf].io=0;
                         tab_pa.dernier++;
                         if (num_ep >2)break;//entrée => io=0
-                    }
-                }
-                */
+                } // Le if et else ci-dessus doivent pouvoir être simplifiés.
             }
         }
     if (num_intf == 3) break;
     }
     
     
-    
+
     
     //release des interfaces  
     for(int num_intf=0;num_intf < config->bNumInterfaces ;num_intf++){
