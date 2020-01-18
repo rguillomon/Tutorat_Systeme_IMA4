@@ -94,6 +94,8 @@
 		
 		/** Size in bytes of the Keyboard HID reporting IN and OUT endpoints. */
 		#define KEYBOARD_EPSIZE           8
+		#define BOUTONS_EPSIZE						8
+		#define JOYSTICK_EPSIZE						16
 
 
 	/* Function Prototypes: */

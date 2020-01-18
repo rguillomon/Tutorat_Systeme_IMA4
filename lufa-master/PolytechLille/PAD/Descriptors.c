@@ -133,7 +133,7 @@ const USB_Descriptor_Configuration_t PROGMEM RelayBoard_ConfigurationDescriptor 
 		{
 			.Header                 = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
 
-			.InterfaceNumber        = INTERFACE_ID_InterfaceIN, //pas sur mais presque
+			.InterfaceNumber        = INTERFACE_ID_InterfaceIN
 			.AlternateSetting       = 0x00,
 
 			.TotalEndpoints         = 2,
@@ -151,7 +151,7 @@ const USB_Descriptor_Configuration_t PROGMEM RelayBoard_ConfigurationDescriptor 
 
 			.EndpointAddress        = KEYBOARD_IN_Bout_EPADDR,
 			.Attributes             = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
-			.EndpointSize           = KEYBOARD_EPSIZE,
+			.EndpointSize           = BOUTONS_EPSIZE,
 			.PollingIntervalMS      = 0x05
 		},
 
@@ -161,7 +161,7 @@ const USB_Descriptor_Configuration_t PROGMEM RelayBoard_ConfigurationDescriptor 
 
 			.EndpointAddress        = KEYBOARD_IN_Joy_EPADDR,
 			.Attributes             = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
-			.EndpointSize           = KEYBOARD_EPSIZE,
+			.EndpointSize           = JOYSTICK_EPSIZE,
 			.PollingIntervalMS      = 0x05
 		}
 };

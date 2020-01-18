@@ -86,8 +86,8 @@ void EVENT_USB_Device_ConfigurationChanged(void)
 	bool ConfigSuccess = true;
 
 	/* Setup HID Report Endpoints */		//MODIFS ICI
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(KEYBOARD_IN_Bout_EPADDR, EP_TYPE_INTERRUPT, KEYBOARD_EPSIZE, 1);
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(KEYBOARD_IN_Joy_EPADDR, EP_TYPE_INTERRUPT, KEYBOARD_EPSIZE, 1);
+	ConfigSuccess &= Endpoint_ConfigureEndpoint(KEYBOARD_IN_Bout_EPADDR, EP_TYPE_INTERRUPT, BOUTONS_EPSIZE, 1);
+	ConfigSuccess &= Endpoint_ConfigureEndpoint(KEYBOARD_IN_Joy_EPADDR, EP_TYPE_INTERRUPT, JOYSTICK_EPSIZE, 1);
 	ConfigSuccess &= Endpoint_ConfigureEndpoint(KEYBOARD_OUT_EPADDR, EP_TYPE_INTERRUPT, KEYBOARD_EPSIZE, 1);
 
 	/* Turn on Start-of-Frame events for tracking HID report period expiry */
