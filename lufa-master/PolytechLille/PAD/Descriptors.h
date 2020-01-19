@@ -52,7 +52,6 @@
 
 			// Relay Board Interface
 			USB_Descriptor_Interface_t            InterfaceOUT;
-			//USB_HID_Descriptor_HID_t              HID_KeyboardHID;				//UTILE ?
 			USB_Descriptor_Endpoint_t             ReportOUTEndpoint;
 			
 			USB_Descriptor_Interface_t            InterfaceIN;
@@ -84,15 +83,17 @@
 
 	/* Macros: */
 	
-	
-		/** Endpoint address of the Keyboard HID reporting IN endpoint. */
-		#define KEYBOARD_IN_Bout_EPADDR        (ENDPOINT_DIR_IN  | 1)		//Adr. EP Boutons
-		#define KEYBOARD_IN_Joy_EPADDR        (ENDPOINT_DIR_IN  | 1)		//Adr. EP Joystick
-
 		/** Endpoint address of the Keyboard HID reporting OUT endpoint. */
-		#define KEYBOARD_OUT_EPADDR       (ENDPOINT_DIR_OUT | 2)
+		#define KEYBOARD_OUT_EPADDR (ENDPOINT_DIR_OUT | 1)
 		
-		/** Size in bytes of the Keyboard HID reporting IN and OUT endpoints. */
+		
+		/** Endpoint address of the Keyboard HID reporting IN endpoint. */
+		#define KEYBOARD_IN_Bout_EPADDR (ENDPOINT_DIR_IN | 2)		//Adr. EP Boutons (direction | numéro du point d'accès)
+		#define KEYBOARD_IN_Joy_EPADDR (ENDPOINT_DIR_IN | 3)		//Adr. EP Joystick
+
+		
+		
+		/** Size in bytes of the PAD HID reporting IN and OUT endpoints. */
 		#define LED_EPSIZE		1
 		#define BOUTONS_EPSIZE		1
 		#define JOYSTICK_EPSIZE		2

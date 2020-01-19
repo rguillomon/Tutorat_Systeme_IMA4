@@ -38,6 +38,9 @@
 
 #include "Descriptors.h"
 
+#define VENDOR_ID		0x2341
+#define PRODUCT_ID		0x0001
+
 /** Device descriptor structure. This descriptor, located in FLASH memory, describes the overall
  *  device characteristics, including the supported USB version, control endpoint size and the
  *  number of device configurations. The descriptor is read out by the USB host when the enumeration
@@ -54,8 +57,8 @@ const USB_Descriptor_Device_t PROGMEM RelayBoard_DeviceDescriptor =
 
 	.Endpoint0Size          = FIXED_CONTROL_ENDPOINT_SIZE,
 
-	.VendorID               = 0x04B4,		//A MODIFIER avec VendorID Carte
-	.ProductID              = 0xFD11,		//A MODIFIER
+	.VendorID               = VENDOR_ID,
+	.ProductID              = PRODUCT_ID,
 	.ReleaseNumber          = VERSION_BCD(2,0,0),
 
 	.ManufacturerStrIndex   = STRING_ID_Manufacturer,
@@ -88,12 +91,12 @@ const USB_Descriptor_Configuration_t PROGMEM RelayBoard_ConfigurationDescriptor 
 		},
 
 	/* Description Interface SORTIE (LED)*/
-	.InferfaceOUT =
+	.InterfaceOUT =
 		{
 			.Header                 = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
 
 			.InterfaceNumber        = INTERFACE_ID_InterfaceOUT,
-			.AlternateSetting       = 0,
+			.AlternateSetting       = 0x00,
 
 			.TotalEndpoints         = 1,
 
@@ -103,19 +106,6 @@ const USB_Descriptor_Configuration_t PROGMEM RelayBoard_ConfigurationDescriptor 
 
 			.InterfaceStrIndex      = NO_DESCRIPTOR
 		},
-	
-	/*
-	.HID_KeyboardHID =
-		{
-			.Header                 = {.Size = sizeof(USB_HID_Descriptor_HID_t), .Type = HID_DTYPE_HID},
-
-			.HIDSpec                = VERSION_BCD(1,1,1),
-			.CountryCode            = 0x00,
-			.TotalReportDescriptors = 1,
-			.HIDReportType          = HID_DTYPE_Report,
-			.HIDReportLength        = sizeof(KeyboardReport)
-		},
-	*/
 	
 	.ReportOUTEndpoint =
 		{
@@ -133,7 +123,7 @@ const USB_Descriptor_Configuration_t PROGMEM RelayBoard_ConfigurationDescriptor 
 		{
 			.Header                 = {.Size = sizeof(USB_Descriptor_Interface_t), .Type = DTYPE_Interface},
 
-			.InterfaceNumber        = INTERFACE_ID_InterfaceIN
+			.InterfaceNumber        = INTERFACE_ID_InterfaceIN,
 			.AlternateSetting       = 0x00,
 
 			.TotalEndpoints         = 2,
@@ -163,7 +153,7 @@ const USB_Descriptor_Configuration_t PROGMEM RelayBoard_ConfigurationDescriptor 
 			.Attributes             = (EP_TYPE_INTERRUPT | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
 			.EndpointSize           = JOYSTICK_EPSIZE,
 			.PollingIntervalMS      = 0x05
-		}
+		},
 };
 
 /** Language descriptor structure. This descriptor, located in FLASH memory, is returned when the host requests

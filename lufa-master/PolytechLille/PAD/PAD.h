@@ -46,9 +46,9 @@
 		#include "Descriptors.h"
 
 		//#include <LUFA/Drivers/Board/LEDs.h>
-		//#include <LUFA/Drivers/PeripheralSerial.h> //inventé?
 		#include <LUFA/Drivers/USB/USB.h>
 		#include <LUFA/Platform/Platform.h>
+		#include "LUFA/Drivers/Peripheral/Serial.h"
 
 	/* Macros: */
 		
@@ -56,9 +56,10 @@
 	/* Function Prototypes: */
 		void SetupHardware(void);
 		void EVENT_USB_Device_ConfigurationChanged(void);
-		void SendNextReport(void);
-		void ReceiveNextReport(void);
-		//void EVENT_USB_Device_ControlRequest(void);
+		void Send_EP_IN_Report(void);
+		void Receive_EP_OUT_Report(void);
+		void Reception_Serie(void);
+		void PAD_Task(void);
 
 #endif
 

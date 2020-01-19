@@ -3,9 +3,10 @@
 
 // For the serial port
 
-#define CPU_FREQ        16000000L       // Assume a CPU frequency of 16Mhz
-#define tempo						25
-#define debit						9600						//débit liaison série en bauds 
+#define CPU_FREQ        16000000L   // Assume a CPU frequency of 16Mhz
+#define tempo			25
+#define debit			9600		//débit liaison série en bauds
+#define debut_serial_tx	0xff		//pour détecter la transmission d'une trame pour le 16u2
 
 void init_serial(int speed)
 {
@@ -24,40 +25,40 @@ UCSR0A &= ~(1 << U2X0);
 
 void send_serial(unsigned char c)
 {
-loop_until_bit_is_set(UCSR0A, UDRE0);
-UDR0 = c;
+	loop_until_bit_is_set(UCSR0A, UDRE0);
+	UDR0 = c;
 }
 
 unsigned char get_serial(void) {
-loop_until_bit_is_set(UCSR0A, RXC0);
-return UDR0;
+	loop_until_bit_is_set(UCSR0A, RXC0);
+	return UDR0;
 }
 
 // For the AD converter
 
 void ad_init(unsigned char channel)   
 {   
-ADCSRA|=(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);   
-ADMUX|=(1<<REFS0)|(1<<ADLAR);
-ADMUX=(ADMUX&0xf0)|channel;   
-ADCSRA|=(1<<ADEN);
+	ADCSRA|=(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);   
+	ADMUX|=(1<<REFS0)|(1<<ADLAR);
+	ADMUX=(ADMUX&0xf0)|channel;   
+	ADCSRA|=(1<<ADEN);
 }   
 
 //récupère la valeur de l'ADCH
 unsigned int ad_sample(void){
-ADCSRA|=(1<<ADSC);
-while(bit_is_set(ADCSRA, ADSC));
-return ADCH;
+	ADCSRA|=(1<<ADSC);
+	while(bit_is_set(ADCSRA, ADSC));
+	return ADCH;
 }
 
 // For the I/O 
 void output_init(void){
-DDRB |= 0b00111111; // PIN 8-13 as output (LED)
+	DDRB |= 0b00111111; // PIN 8-13 as output (LED)
 }
 
 /*
 void output_set(unsigned char value){
-if(value==0) PORTB &= 0xfe; else PORTB |= 0x01;
+	if(value==0) PORTB &= 0xfe; else PORTB |= 0x01;
 }
 */
 
@@ -68,7 +69,7 @@ void input_init(void){
 
 /*
 unsigned char input_get(void){
-return ((PIND&0x04)!=0)?1:0;
+	return ((PIND&0x04)!=0)?1:0;
 }
 */
 
@@ -116,59 +117,61 @@ unsigned char shape_joy(unsigned char pos){
 
 /* Récupération de la valeur de l'axe du joystick sur la chaîne channel du CAN */
 unsigned char get_joystick(int channel){
-	  unsigned char axis;
-	  ad_init(channel);
-    axis = ad_sample();
-    axis = shape_joy(axis);
-    return axis;
+	unsigned char axis;
+	ad_init(channel);
+	axis = ad_sample();
+	axis = shape_joy(axis);
+	return axis;
 }
 
 /* Dummy main */
 int main(void){
 
 	//INITIALISATIONS  
-  unsigned char boutons, boutons_anc;
-  unsigned char joystick_x=0x10, joystick_x_anc=0x10;
-  unsigned char joystick_y=0x10, joystick_y_anc=0x10;
+	unsigned char boutons, boutons_anc;
+	unsigned char joystick_x=0x10, joystick_x_anc=0x10;
+	unsigned char joystick_y=0x10, joystick_y_anc=0x10;
   
-  init_serial(debit);
-  output_init();
-  input_init();
+	init_serial(debit);
+	output_init();
+	input_init();
 
 	//Récupération des valeurs des boutons et joystick, et mise en forme
-  boutons = get_buttons();
-  joystick_x = get_joystick(0);
-  joystick_y = get_joystick(1);
+	boutons = get_buttons();
+	joystick_x = get_joystick(0);
+	joystick_y = get_joystick(1);
   
-  while(1){
+	while(1){
 		boutons_anc = boutons;
 		joystick_x_anc = joystick_x;
 		joystick_y_anc = joystick_y;
     
-   	//Récupération des valeurs des boutons et joystick, et mise en forme
-  	boutons = get_buttons();
-  	joystick_x = get_joystick(0);
-  	_delay_ms(tempo);
-  	joystick_y = get_joystick(1);
+		//Récupération des valeurs des boutons et joystick, et mise en forme
+		boutons = get_buttons();
+		joystick_x = get_joystick(0);
+		_delay_ms(tempo);
+		joystick_y = get_joystick(1);
     	
-    //Port série libre
-    if ((UCSR0A & (1<<RXC0)) == 0){
-    	// Si une des grandeurs a changé
-    	if ((boutons_anc != boutons) || (joystick_x_anc != joystick_x) || (joystick_y_anc != joystick_y)){
-    		send_serial(boutons);	//on envoie l'état global des grandeurs
-      	send_serial(joystick_x);
-      	send_serial(joystick_y);    	  	
-      	//retour chariot
-      	send_serial(0x0a);
-      	send_serial(0x0d);
+		//Port série libre
+		if ((UCSR0A & (1<<RXC0)) == 0){
+			// Si une des grandeurs a changé
+			if ((boutons_anc != boutons) || (joystick_x_anc != joystick_x) || (joystick_y_anc != joystick_y)){
+				/* On envoie la trame des grandeurs */
+				send_serial(debut_serial_tx);	//début de trame
+				send_serial(boutons);			//état global des grandeurs
+				send_serial(joystick_x);
+				send_serial(joystick_y);    	  	
+				//retour chariot
+				send_serial(0x0a);
+				send_serial(0x0d);
 			}
 		}
 		
 		//Port série occupé	
 		else{
-		commande_leds();	//On gère la commande des leds
+			commande_leds();	//On gère la commande des leds
 		}
-  }  
+	}  
 	return 0;
 }
 
