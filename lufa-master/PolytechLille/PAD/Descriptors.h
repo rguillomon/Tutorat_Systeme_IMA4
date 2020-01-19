@@ -53,11 +53,11 @@
 			// Relay Board Interface
 			USB_Descriptor_Interface_t            InterfaceOUT;
 			//USB_HID_Descriptor_HID_t              HID_KeyboardHID;				//UTILE ?
-			USB_Descriptor_Endpoint_t             HID_ReportOUTEndpoint;
+			USB_Descriptor_Endpoint_t             ReportOUTEndpoint;
 			
 			USB_Descriptor_Interface_t            InterfaceIN;
-			USB_Descriptor_Endpoint_t             HID_ReportINEndpointBoutons;
-			USB_Descriptor_Endpoint_t             HID_ReportOUTEndpointJoystick;
+			USB_Descriptor_Endpoint_t             ReportINEndpointBoutons;
+			USB_Descriptor_Endpoint_t             ReportOUTEndpointJoystick;
 		} USB_Descriptor_Configuration_t;
 
 		/** Enum for the device interface descriptor IDs within the device. Each interface descriptor
@@ -93,9 +93,9 @@
 		#define KEYBOARD_OUT_EPADDR       (ENDPOINT_DIR_OUT | 2)
 		
 		/** Size in bytes of the Keyboard HID reporting IN and OUT endpoints. */
-		#define KEYBOARD_EPSIZE           8
-		#define BOUTONS_EPSIZE						8
-		#define JOYSTICK_EPSIZE						16
+		#define LED_EPSIZE		1
+		#define BOUTONS_EPSIZE		1
+		#define JOYSTICK_EPSIZE		2
 
 
 	/* Function Prototypes: */

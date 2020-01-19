@@ -58,7 +58,7 @@
 		void EVENT_USB_Device_ConfigurationChanged(void);
 		void SendNextReport(void);
 		void ReceiveNextReport(void);
-		void EVENT_USB_Device_ControlRequest(void);
+		//void EVENT_USB_Device_ControlRequest(void);
 
 #endif
 
