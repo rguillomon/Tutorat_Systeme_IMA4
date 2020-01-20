@@ -232,7 +232,7 @@ int main(){
     		receive_data(tab_PA, &boutons, &joystick_x, &joystick_y); //Réception des boutons et joystick
     		//printf("fin rcpt\n");
     		printf("Boutons : %02x, Joystick_x : %02x, Joystick_y :%02x\n", boutons, joystick_x, joystick_y);	//Affichage si changement
-    		if ((boutons != boutons_anc) || (joystick_x != joystick_x_anc) || (joystick_y != joystick_y_anc)) printf("Boutons : %02x, Joystick_x : %02x, Joystick_y :%c\n", boutons, joystick_x, joystick_y);	//Affichage si changement
+    		//if ((boutons != boutons_anc) || (joystick_x != joystick_x_anc) || (joystick_y != joystick_y_anc)) printf("Boutons : %02x, Joystick_x : %02x, Joystick_y :%c\n", boutons, joystick_x, joystick_y);	//Affichage si changement
     		
     		boutons_anc = boutons;
     		joystick_x_anc = joystick_x;

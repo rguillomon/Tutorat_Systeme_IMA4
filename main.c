@@ -80,20 +80,20 @@ void commande_leds(){
 	if (temp_serial !=0){
 		leds = temp_serial;
 		// Allumer LED de 'A' à 'F'
-		if (leds == 65) PORTB = PORTB | 0x01; 
-		if (leds == 66) PORTB = PORTB | 0x02;
-		if (leds == 67) PORTB = PORTB | 0x04;
-		if (leds == 68) PORTB = PORTB | 0x08;
-		if (leds == 69) PORTB = PORTB | 0x10;
-		if (leds == 70) PORTB = PORTB | 0x20;
+		if (leds == 'A') PORTB = PORTB | 0x01; 
+		if (leds == 'B') PORTB = PORTB | 0x02;
+		if (leds == 'C') PORTB = PORTB | 0x04;
+		if (leds == 'D') PORTB = PORTB | 0x08;
+		if (leds == 'E') PORTB = PORTB | 0x10;
+		if (leds == 'F') PORTB = PORTB | 0x20;
 		
 		// Eteindre LED de 'a' à 'f'
-		if (leds == 97) PORTB = PORTB & 0xfe;
-		if (leds == 98) PORTB = PORTB & 0xfd;
-		if (leds == 99) PORTB = PORTB & 0xfb;
-		if (leds == 100) PORTB = PORTB & 0xf7;
-		if (leds == 101) PORTB = PORTB & 0xef;
-		if (leds == 102) PORTB = PORTB & 0xdf;
+		if (leds == 'a') PORTB = PORTB & 0xfe;
+		if (leds == 'b') PORTB = PORTB & 0xfd;
+		if (leds == 'c') PORTB = PORTB & 0xfb;
+		if (leds == 'd') PORTB = PORTB & 0xf7;
+		if (leds == 'e') PORTB = PORTB & 0xef;
+		if (leds == 'f') PORTB = PORTB & 0xdf;
 	}
 }
 
@@ -174,15 +174,3 @@ int main(void){
 	}  
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
