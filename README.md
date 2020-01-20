@@ -2,7 +2,7 @@ READ ME
 
 Tutorat système
 
-Rémi Guillomon // Guillaume Cremaschi
+Rémi Guillomon et Guillaume Cremaschi
 
 Objectif : Utiliser un shield Arduino de jeu et assurer la liaison USB à un PC.
 
@@ -12,7 +12,7 @@ Les compilations et l'exécution se déroulent en plusieurs étapes.
 
 - Étape 1: Vérifiez que la carte ne soit pas flashée.
 
-`lsusb`
+```lsusb```
 
 
 Si l'ATMega16u2 est déjà flashé, il faut enregistrer le binaire du lien : https://raw.githubusercontent.com/arduino/ArduinoCore-avr/master/firmwares/atmegaxxu2/arduino-usbserial/Arduino-usbserial-uno.hex 
@@ -39,7 +39,7 @@ Passez en root pour l'upload si nécessaire.
 
 Vous pouvez tester ce progrmme directement avec la commande
 
-`minicom -8 -o -b 9600 -D /dev/ttyACM0`
+```minicom -8 -o -b 9600 -D /dev/ttyACM0```
 
 
 - Étape 3: Flasher l'ATMega16U2 avec le programme de la partie 3
@@ -65,18 +65,18 @@ Débranchez et rebranchez le port USB de la carte à nouveau.
 
 Placez-vous dans le répertoire Pgm PC
 
-`cd ../../../Pgm\ PC/`
+```cd ../../../Pgm\ PC/```
 
 et compilez.
 
-`gcc -o exe init_USB.c -lusb-1.0 -Wall -Wextra`
+```gcc -o exe init_USB.c -lusb-1.0 -Wall -Wextra```
 
 - Etape 5 :
 
 Vous pouvez lancer le programme en exécutant le fichier généré.
-`
+```
 ./exe
-`
+```
 
 II. Etat du programme
 
