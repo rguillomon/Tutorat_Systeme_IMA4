@@ -24,9 +24,9 @@ Court-circuitez les broches GND et RESET de l'ATMega16U2 sur l'ICSP de ce micro-
 Puis écrivez dans un terminal :
 
 ```
-\> dfu-programmer atmega16u2 erase
-\> dfu-programmer atmega16u2 flash Arduino-usbserial-uno.hex
-\> dfu-programmer atmega16u2 reset
+dfu-programmer atmega16u2 erase
+dfu-programmer atmega16u2 flash Arduino-usbserial-uno.hex
+dfu-programmer atmega16u2 reset
 ```
 
 Débranchez et rebranchez le port USB de la carte.
@@ -105,11 +105,3 @@ II. Etat du programme
 	La réception des données sur la liaison série de l'ATmega16U2, via la fonction Reception_Serie() n'est en effet pas opérationnelle. Une fois initialisés, les octets des boutons et des axes des joysticks, sont bien transmis au PC (et affichés sur le terminal) mais leur valeur ne change pas malgré les intéractions avec la manette.
 
 	Il est possible que la commande des LED via le PC ne soit pas non plus fonctionnelle à cause du premier point abordé.
-
-
-
-
-
-
-
-
