@@ -10,9 +10,11 @@ I. Compilations et exécution
 
 Les compilations et l'exécution se déroulent en plusieurs étapes.
 
-- Étape 1: Vérifiez que la carte ne soit pas flashée.
+-  Étape 1: Vérifiez que la carte ne soit pas flashée.
 
-```lsusb```
+```
+lsusb
+```
 
 
 Si l'ATMega16u2 est déjà flashé, il faut enregistrer le binaire du lien : https://raw.githubusercontent.com/arduino/ArduinoCore-avr/master/firmwares/atmegaxxu2/arduino-usbserial/Arduino-usbserial-uno.hex 
@@ -20,6 +22,7 @@ Si l'ATMega16u2 est déjà flashé, il faut enregistrer le binaire du lien : htt
 Court-circuitez les broches GND et RESET de l'ATMega16U2 sur l'ICSP de ce micro-contrôleur
 
 Puis écrivez dans un terminal :
+
 ```
 \> dfu-programmer atmega16u2 erase
 \> dfu-programmer atmega16u2 flash Arduino-usbserial-uno.hex
@@ -28,7 +31,7 @@ Puis écrivez dans un terminal :
 
 Débranchez et rebranchez le port USB de la carte.
 
-- Étape 2 : Compilation et chargement du programme main.c dans l'ATMega328P
+-  Étape 2 : Compilation et chargement du programme main.c dans l'ATMega328P
 
 Dans un terminal, entrez ces commandes.
 ```
@@ -39,10 +42,12 @@ Passez en root pour l'upload si nécessaire.
 
 Vous pouvez tester ce progrmme directement avec la commande
 
-```minicom -8 -o -b 9600 -D /dev/ttyACM0```
+```
+minicom -8 -o -b 9600 -D /dev/ttyACM0
+```
 
 
-- Étape 3: Flasher l'ATMega16U2 avec le programme de la partie 3
+-  Étape 3: Flasher l'ATMega16U2 avec le programme de la partie 3
 
 Entrez dans le répertoire suivant et compilez
 ```
@@ -61,17 +66,21 @@ dfu-programmer atmega16u2 reset
 
 Débranchez et rebranchez le port USB de la carte à nouveau.
 
-- Étape 4: Compilation du programme sur le PC
+-  Étape 4: Compilation du programme sur le PC
 
 Placez-vous dans le répertoire Pgm PC
 
-```cd ../../../Pgm\ PC/```
+```
+cd ../../../Pgm\ PC/
+```
 
 et compilez.
 
-```gcc -o exe init_USB.c -lusb-1.0 -Wall -Wextra```
+```
+gcc -o exe init_USB.c -lusb-1.0 -Wall -Wextra
+```
 
-- Etape 5 :
+-  Etape 5 :
 
 Vous pouvez lancer le programme en exécutant le fichier généré.
 ```
@@ -80,7 +89,7 @@ Vous pouvez lancer le programme en exécutant le fichier généré.
 
 II. Etat du programme
 
-- Ce qui fonctionne :
+-  Ce qui fonctionne :
 
 	Le programme de l'ATMega328P est fonctionnel. Lors d'un changement d'état des boutons ou d'un déplacement du joystick, il envoie à la suite un octet de début de trame, l'octet associé au boutons, la valeur de l'axe x du joystick et celle de l'axe y. Ces trois derniers octets sont mis en forme comme conseillé dans l'énoncé.
 
@@ -89,7 +98,7 @@ II. Etat du programme
 	La connexion entre l'ATMega16U2 et le PC par les points d'accès s'établit correctement. De plus, l'envoi des données sur la liaison série par l'ATMega328P fonctionne (testé avec minicom).
 
 
-- Ce qui ne fonctionne pas :
+-  Ce qui ne fonctionne pas :
 
 	Nous n'avons pas eu l'occasion de réaliser la commande des LED depuis l'exécutable du PC.
 
