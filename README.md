@@ -24,12 +24,12 @@ Puis écrire :
 Étape 2 :
 Compiler et Upload le programme main.c sur l'arduino.
 
->gcc -o main main.c -Wall;  (pas sur que ce soit nécessaire)
+\>gcc -o main main.c -Wall;  (pas sur que ce soit nécessaire)
 >make all;
 >make upload;
 
-(Remarque : On peut tester ce progrmme directement avec :
->minicom -8 -o -b 9600 -D /dev/ttyACM0;                 )
+(Remarque : On peut tester ce progrmme directement avec :)
+>minicom -8 -o -b 9600 -D /dev/ttyACM0;                 
 
 Le programme est maintenant sur l'Arduino.
 
