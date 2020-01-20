@@ -8,6 +8,7 @@ Objectif : Créer une manette avec une carte Arduino relier en connexion USB ave
 
 Pour compiler, lancer et ultiliser les programmes :
 
+
 Étape 1: Vérifier que la carte ne soit pas flashée.
 
 \>lsusb
@@ -28,7 +29,7 @@ Puis écrire :
 Étape 2 :
 Compiler et Upload le programme main.c sur l'arduino.
 
-\>gcc -o main main.c -Wall  (pas sur que ce soit nécessaire)
+\>gcc -o main main.c -Wall -Wextra (pas sur que ce soit nécessaire)
 
 \>make all
 
@@ -39,6 +40,7 @@ Compiler et Upload le programme main.c sur l'arduino.
 \>minicom -8 -o -b 9600 -D /dev/ttyACM0                 
 
 Le programme est maintenant sur l'Arduino.
+
 
 Étape 3:
 Flasher la carte
@@ -55,8 +57,11 @@ Flasher la carte
 
 \>dfu-programmer atmega16u2 reset
 
+
 Étape 4:
 Compiler la partie 1 et l'exécuter.
+
+\>cd Pgm_PC/
 
 \>gcc -o exe init_USB.c -lusb-1.0 -Wall -Wextra
 
@@ -65,6 +70,7 @@ Compiler la partie 1 et l'exécuter.
 
 
 Ce qui marche :
+
 _ La Partie 2, fonctionne correctement et compile sans warnings.
 
 
