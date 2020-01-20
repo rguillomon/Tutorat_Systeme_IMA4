@@ -8,6 +8,7 @@ Objectif : Créer une manette avec une carte Arduino relier en connexion USB ave
 
 Pour compiler, lancer et ultiliser les programmes :
 
+
 Étape 1: Vérifier que la carte ne soit pas flashée.
 
 \>lsusb
@@ -29,7 +30,8 @@ Puis écrire :
 Débrancher et rebrancher le port USB de la carte.
 
 Étape 2 :
-Compiler et charger le programme main.c sur l'arduino.
+
+Compiler et Upload le programme main.c sur l'arduino.
 
 \>make all
 
@@ -43,6 +45,7 @@ Remarque : Nous pouvons tester ce progrmme directement avec :
 
 
 Le programme est maintenant sur l'Arduino.
+
 
 Étape 3:
 Flasher la carte
@@ -64,7 +67,9 @@ Débrancher et rebrancher le port USB de la carte.
 Étape 4:
 Compiler la partie 1 et l'exécuter.
 
+
 \>cd ../../../Pgm\ PC/
+
 \>gcc -o exe init_USB.c -lusb-1.0 -Wall -Wextra
 
 \>./exe
@@ -72,6 +77,7 @@ Compiler la partie 1 et l'exécuter.
 
 
 Ce qui marche :
+
 _ La Partie 2, fonctionne correctement et compile sans warnings.
 
 
