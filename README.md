@@ -24,12 +24,12 @@ Le programme est maintenant sur l'Arduino.
 
 Étape 3:
 Flasher la carte
->cd lufa-master/
->cd PolytechLille PAD/
->make all
->
->          } 3 lignes de codes dans le sujet.
->
+>>cd lufa-master/
+>>cd PolytechLille PAD/
+>>make all
+>>dfu-programmer atmega16u2 erase
+>>dfu-programmer atmega16u2 flash PAD.hex
+>>dfu-programmer atmega16u2 reset
 
 Étape 4:
 Que faut-il faire pour implanter la partie 1 ?
