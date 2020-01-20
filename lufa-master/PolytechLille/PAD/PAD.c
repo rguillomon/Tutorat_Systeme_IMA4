@@ -38,9 +38,10 @@
 #include "PAD.h"
 
 
-#define debut_rcpt 0x40 //valeur arbitraire pour détecter un début de trame
+#define debut_rcpt 0x40	//valeur arbitraire pour détecter un début de trame
+#define DEBIT	9600	//débit liaison série en bauds
 
-uint8_t boutons=0xaa;
+uint8_t boutons=0xaa; //arbitraire pour test de la réception série
 uint8_t joystick_x=0xbb;
 uint8_t joystick_y=0xcc;
 
@@ -78,7 +79,7 @@ void SetupHardware(void)
 	/**INITIALISATIONS*/
 	/* Hardware Initialization */
 	USB_Init();
-	Serial_Init(9600,0); 	//9600 Bauds, configuration
+	Serial_Init(DEBIT,0); 	//9600 Bauds, configuration
 
 	/* Initialize Relays */
 	//DDRD  |=  ALL_RELAYS;		// Port pour la liaison série

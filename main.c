@@ -3,9 +3,11 @@
 
 // For the serial port
 
-#define CPU_FREQ        16000000L   // Assume a CPU frequency of 16Mhz
-#define tempo			25
-#define debit			9600		//débit liaison série en bauds
+#define CPU_FREQ	16000000L   // Assume a CPU frequency of 16Mhz
+#define tempo	25
+#define debit	9600		//débit liaison série en bauds
+#define ADC0	0
+#define ADC1	1
 #define debut_serial_tx	0x40		//pour détecter la transmission d'une trame pour le 16u2
 
 void init_serial(int speed)
@@ -138,8 +140,8 @@ int main(void){
 
 	//Récupération des valeurs des boutons et joystick, et mise en forme
 	boutons = get_buttons();
-	joystick_x = get_joystick(0);
-	joystick_y = get_joystick(1);
+	joystick_x = get_joystick(ADC0);
+	joystick_y = get_joystick(ADC1);
   
 	while(1){
 		boutons_anc = boutons;
@@ -148,9 +150,9 @@ int main(void){
     
 		//Récupération des valeurs des boutons et joystick, et mise en forme
 		boutons = get_buttons();
-		joystick_x = get_joystick(0);
+		joystick_x = get_joystick(ADC0);
 		_delay_ms(tempo);
-		joystick_y = get_joystick(1);
+		joystick_y = get_joystick(ADC1);
     	
 		//Port série libre
 		if ((UCSR0A & (1<<RXC0)) == 0){

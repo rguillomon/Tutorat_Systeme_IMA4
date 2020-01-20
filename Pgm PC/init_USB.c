@@ -3,9 +3,9 @@
 #include <stdlib.h>
 
 /* Caractéristiques du périphérique */
-#define VENDOR_ID		0x2341
-#define PRODUCT_ID		0x0001
-#define TAB_PA_SIZE		10
+#define VENDOR_ID	0x2341
+#define PRODUCT_ID	0x0001
+#define TAB_PA_SIZE	10
 
 libusb_device_handle *handle=NULL;
 libusb_device *device=NULL;
@@ -182,7 +182,7 @@ void receive_data(unsigned char tab_PA[TAB_PA_SIZE], unsigned char *boutons, uns
 	status = libusb_interrupt_transfer(handle, PA, joystick_xy, length, &transferred, timeout);
 	if(status!=0){perror("libusb_interrupt_transfer");exit(-1);}
 	
-	//TODO Pas sûr !
+
 	if (joystick_xy !=NULL){
 		*joystick_x = joystick_xy[0];	//On sépare la data de chaque axe
 		*joystick_y = joystick_xy[1];
@@ -214,7 +214,7 @@ int main(){
     unsigned char boutons, boutons_anc=0xff;
     unsigned char joystick_x, joystick_x_anc=0xff;
     unsigned char joystick_y, joystick_y_anc=0xff;
-    unsigned char caractere;
+    //unsigned char caractere;
     
     
     //TODO boucle while(pas d'arrêt), envoi et rcpt
@@ -228,11 +228,12 @@ int main(){
     	}
     	else {
     	*/
-    		//printf("début rcpt\n");
+    		
     		receive_data(tab_PA, &boutons, &joystick_x, &joystick_y); //Réception des boutons et joystick
-    		//printf("fin rcpt\n");
+    		
+    		
     		printf("Boutons : %02x, Joystick_x : %02x, Joystick_y :%02x\n", boutons, joystick_x, joystick_y);	//Affichage si changement
-    		//if ((boutons != boutons_anc) || (joystick_x != joystick_x_anc) || (joystick_y != joystick_y_anc)) printf("Boutons : %02x, Joystick_x : %02x, Joystick_y :%c\n", boutons, joystick_x, joystick_y);	//Affichage si changement
+    		if ((boutons != boutons_anc) || (joystick_x != joystick_x_anc) || (joystick_y != joystick_y_anc)) printf("Boutons : %02x, Joystick_x : %02x, Joystick_y :%c\n", boutons, joystick_x, joystick_y);	//Affichage si changement
     		
     		boutons_anc = boutons;
     		joystick_x_anc = joystick_x;
