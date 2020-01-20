@@ -56,7 +56,7 @@
 			
 			USB_Descriptor_Interface_t            InterfaceIN;
 			USB_Descriptor_Endpoint_t             ReportINEndpointBoutons;
-			USB_Descriptor_Endpoint_t             ReportOUTEndpointJoystick;
+			USB_Descriptor_Endpoint_t             ReportINEndpointJoystick;
 		} USB_Descriptor_Configuration_t;
 
 		/** Enum for the device interface descriptor IDs within the device. Each interface descriptor

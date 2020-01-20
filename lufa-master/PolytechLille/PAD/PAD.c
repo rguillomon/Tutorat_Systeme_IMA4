@@ -38,7 +38,7 @@
 #include "PAD.h"
 
 
-#define debut_rcpt 0xff //valeur arbitraire pour détecter un début de trame
+#define debut_rcpt 0x40 //valeur arbitraire pour détecter un début de trame
 
 uint8_t boutons;
 uint8_t joystick_x;
@@ -59,6 +59,7 @@ int main(void)
     {
 	  USB_USBTask();
       //HID_Task();
+      PAD_Task();
     }
 }
 
@@ -138,7 +139,7 @@ void Send_EP_IN_Report(void)
 	Endpoint_SelectEndpoint(KEYBOARD_IN_Bout_EPADDR);
 
 	/* Check if Keyboard Endpoint Ready for Read/Write and if we should send a new report */
-	if (Endpoint_IsReadWriteAllowed() && Endpoint_IsINReady)
+	if (Endpoint_IsReadWriteAllowed() && Endpoint_IsINReady())
 	{
 		/* Save the current report data for later comparison to check for changes */
 		//PrevKeyboardReportData = KeyboardReportData;
@@ -157,7 +158,7 @@ void Send_EP_IN_Report(void)
 	Endpoint_SelectEndpoint(KEYBOARD_IN_Joy_EPADDR);
 
 	/* Check if Keyboard Endpoint Ready for Read/Write and if we should send a new report */
-	if (Endpoint_IsReadWriteAllowed() && Endpoint_IsINReady)
+	if (Endpoint_IsReadWriteAllowed() && Endpoint_IsINReady())
 	{
 		/* Save the current report data for later comparison to check for changes */
 		//PrevKeyboardReportData = KeyboardReportData;

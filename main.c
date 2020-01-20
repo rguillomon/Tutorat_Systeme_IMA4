@@ -6,7 +6,7 @@
 #define CPU_FREQ        16000000L   // Assume a CPU frequency of 16Mhz
 #define tempo			25
 #define debit			9600		//débit liaison série en bauds
-#define debut_serial_tx	0xff		//pour détecter la transmission d'une trame pour le 16u2
+#define debut_serial_tx	0x40		//pour détecter la transmission d'une trame pour le 16u2
 
 void init_serial(int speed)
 {
