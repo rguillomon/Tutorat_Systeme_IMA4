@@ -16,7 +16,7 @@ Si flashée : enregistrer le binaire du lien : https://raw.githubusercontent.com
 
 Puis écrire :
 
-\>dfu-programmer atmega16u2 erase "\n"
+\>dfu-programmer atmega16u2 erase '\n'
 \>dfu-programmer atmega16u2 flash Arduino-usbserial-uno.hex
 \>dfu-programmer atmega16u2 reset
 
