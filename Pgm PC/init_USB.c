@@ -12,27 +12,6 @@ libusb_device *device=NULL;
 libusb_device *found=NULL; //notre périphérique
 libusb_context *context;
 
-/*
-struct TABLEAU{
-	struct EP *tableau[3]; //tableau des points d'accès en interruption
-	int dernier;
-};
-
-struct EP {
-    uint8_t ep; 				//adresse d'accès de l'endpoint
-    unsigned char io;   //décrit si c'est une entrée ou une sortie
-};
-
-//init structure tableau
-struct TABLEAU tab_pa;
-
-void init_tableau(){
-    for (int i=0;i<3;i++){        
-    tab_pa.tableau[i]=NULL;
-    }
-    tab_pa.dernier=0;
-}
-*/
 
 /*énumération des périphériques USB*/
 void enum_periph(){
@@ -60,7 +39,8 @@ void enum_periph(){
         /* Recherche de notre périphérique et sauvegarde dans 'found' */
         if(desc.idVendor == VENDOR_ID && desc.idProduct == PRODUCT_ID){
         	found = device;
-        	printf("\nPériphérique trouvé @ (Bus:Adresse) %d:%d\n", bus, address);     //test si le "found" reste le meme
+        	printf("\nPériphérique trouvé @ (Bus:Adresse) %d:%d\n", bus, address);
+        	//printf("handle %d\n",found);
         	break;
         }
     }
@@ -128,22 +108,6 @@ void config_periph(unsigned char tab_PA[TAB_PA_SIZE]){
             	dernier_PA++;
             	tab_PA[dernier_PA] = adresse_PA;
             	printf("\t\tPoint d'accès numéro %d sauvegardé. Adresse : %d\n", dernier_PA, adresse_PA);
-			
-				/*
-				ep1.ep=config_desc->interface[indice_intf].altsetting[0].endpoint->bEndpointAddress;
-				if (indice_intf==0){
-					tab_pa.tableau[indice_intf]->ep=ep1.ep;
-            		tab_pa.tableau[indice_intf]->io=1;
-					tab_pa.dernier++;
-          		}
-				else{               
-     	    		tab_pa.tableau[indice_intf]->ep=ep1.ep;
-          			tab_pa.tableau[indice_intf]->io=0;
-          			tab_pa.dernier++;
-         			if (num_ep >2)break;	//entrée => io=0
-         	
-          		 // Le if et else ci-dessus doivent pouvoir être simplifiés.
-          		*/
           	}
         
         }	
@@ -181,7 +145,7 @@ void send_data(unsigned char tab_PA[TAB_PA_SIZE], unsigned char data){
 	unsigned char PA = tab_PA[0]; //LEDs sur le premier point d'accès
 	printf("adresse PA %d\n", tab_PA[0]);
 	int transferred = 1; 	//nombre d'octets transférés
-	unsigned int timeout = 1000;	//temps avant un timeout
+	unsigned int timeout = 100;	//temps avant un timeout
 	int status = libusb_interrupt_transfer(handle, PA, &data, sizeof(data), &transferred, timeout);
 	if(status!=0){perror("libusb_interrupt_transfer");exit(-1);}
 }
@@ -189,28 +153,36 @@ void send_data(unsigned char tab_PA[TAB_PA_SIZE], unsigned char data){
 
 /* Lis le contenu des points d'accès de l'interface IN (boutons et joystick) */
 void receive_data(unsigned char tab_PA[TAB_PA_SIZE], unsigned char *boutons, unsigned char *joystick_x, unsigned char *joystick_y){
-
+	
+	unsigned char PA;
+	int length, transferred;
+	unsigned int timeout;	
+	
 	/* Lecture du point d'accès des boutons */
-	unsigned char PA = tab_PA[1]; //LEDs sur le premier point d'accès
-	printf("adresse PA %d\n", tab_PA[1]);
-	int transferred = 1; 	//nombre d'octets transférés
-	unsigned int timeout = 1000;	//temps avant un timeout
+	PA = tab_PA[1]; //LEDs sur le premier point d'accès
 	
-	int status = libusb_interrupt_transfer(handle, PA, boutons, sizeof(boutons), &transferred, timeout);
-	if(status!=0){perror("libusb_interrupt_transfer");printf("erreur lecture boutons, adresse PA %d\n",tab_PA[1]);exit(-1);}
+	//printf("adresse PA %d\n", tab_PA[1]);
+	//printf("handle %d\n",found);
+	//printf("boutons %p\n", boutons);
 	
-	/* Lecture du point d'accès du joystick */
-	unsigned char *joystick_xy=NULL; //stocke la donnée du point d'accès (1 octet pour chaque axe)
-
-	PA = tab_PA[2]; //LEDs sur le premier point d'accès
-	printf("adresse PA %d\n", tab_PA[2]);
-	transferred = 2; 	//nombre d'octets transférés
-	timeout = 1000;	//temps avant un timeout
+	length = 1;
+	timeout = 100;	//temps avant un timeout
 	
-	status = libusb_interrupt_transfer(handle, PA, joystick_xy, sizeof(joystick_xy), &transferred, timeout);
+	int status = libusb_interrupt_transfer(handle, PA, boutons, length, &transferred, timeout);
 	if(status!=0){perror("libusb_interrupt_transfer");exit(-1);}
 	
-	//TODO Pas sûr !!!
+	/* Lecture du point d'accès du joystick */
+	unsigned char joystick_xy[2]; //stocke la donnée du point d'accès (1 octet pour chaque axe)
+
+	PA = tab_PA[2]; //LEDs sur le premier point d'accès
+	//printf("adresse PA %d\n", tab_PA[2]);
+	length = 2;
+	timeout = 100;	//temps avant un timeout
+	
+	status = libusb_interrupt_transfer(handle, PA, joystick_xy, length, &transferred, timeout);
+	if(status!=0){perror("libusb_interrupt_transfer");exit(-1);}
+	
+	//TODO Pas sûr !
 	if (joystick_xy !=NULL){
 		*joystick_x = joystick_xy[0];	//On sépare la data de chaque axe
 		*joystick_y = joystick_xy[1];
@@ -239,9 +211,9 @@ int main(){
     unsigned char tab_PA[TAB_PA_SIZE];
     config_periph(tab_PA);
     
-    unsigned char *boutons = NULL, *boutons_anc = NULL;
-    unsigned char *joystick_x = NULL, *joystick_x_anc = NULL;
-    unsigned char *joystick_y = NULL, *joystick_y_anc = NULL;
+    unsigned char boutons, boutons_anc=0xff;
+    unsigned char joystick_x, joystick_x_anc=0xff;
+    unsigned char joystick_y, joystick_y_anc=0xff;
     unsigned char caractere;
     
     
@@ -249,21 +221,22 @@ int main(){
     //TODO "pas d'arrêt" = appui sur 's' par exemple
     
     while(1){
-    	/*if (appui sur une touche){
+    	/*// si un caractère intéressant est tapé au clavier, l'envoie à la carte.
+		if (((c=getchar())>='a' && (c=getchar())<='f') || ((c=getchar())>='A' && (c=getchar())<='F')) { 
     		//récupération caractère
-    		send_data(tab_PA, caractere);	//Envoi de la commande des leds
+    		send_data(tab_PA, c);	//Envoi de la commande des leds
     	}
     	else {
     	*/
-    		printf("début rcpt\n");
-    		receive_data(tab_PA, boutons, joystick_x, joystick_y); //Réception des boutons et joystick
-    		printf("fin rcpt\n");
-    		if ((boutons == NULL) || (joystick_x == NULL) || (joystick_y == NULL)) printf("Erreur réception : pointeurs boutons ou joystick nul\n");
-    		if ((*boutons != *boutons_anc) || (joystick_x != joystick_x_anc) || (joystick_y != joystick_y_anc)) printf("Boutons : %c, Joystick_x : %c, Joystick_y :%c\n", *boutons, *joystick_x, *joystick_y);	//Affichage si changement
+    		//printf("début rcpt\n");
+    		receive_data(tab_PA, &boutons, &joystick_x, &joystick_y); //Réception des boutons et joystick
+    		//printf("fin rcpt\n");
+    		printf("Boutons : %02x, Joystick_x : %02x, Joystick_y :%02x\n", boutons, joystick_x, joystick_y);	//Affichage si changement
+    		if ((boutons != boutons_anc) || (joystick_x != joystick_x_anc) || (joystick_y != joystick_y_anc)) printf("Boutons : %02x, Joystick_x : %02x, Joystick_y :%c\n", boutons, joystick_x, joystick_y);	//Affichage si changement
     		
-    		*boutons_anc = *boutons;
-    		*joystick_x_anc = *joystick_x;
-    		*joystick_y_anc = *joystick_y;
+    		boutons_anc = boutons;
+    		joystick_x_anc = joystick_x;
+    		joystick_y_anc = joystick_y;
     	//}
     
     }

@@ -40,9 +40,9 @@
 
 #define debut_rcpt 0x40 //valeur arbitraire pour détecter un début de trame
 
-uint8_t boutons;
-uint8_t joystick_x;
-uint8_t joystick_y;
+uint8_t boutons=0xaa;
+uint8_t joystick_x=0xbb;
+uint8_t joystick_y=0xcc;
 
 
 /** Main program entry point. This routine contains the overall program flow, including initial
