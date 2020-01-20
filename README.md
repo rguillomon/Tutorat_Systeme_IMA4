@@ -16,37 +16,37 @@ Si flashée : enregistrer le binaire du lien : https://raw.githubusercontent.com
 
 Puis écrire :
 
->dfu-programmer atmega16u2 erase
->dfu-programmer atmega16u2 flash Arduino-usbserial-uno.hex
->dfu-programmer atmega16u2 reset
+>dfu-programmer atmega16u2 erase;
+>dfu-programmer atmega16u2 flash Arduino-usbserial-uno.hex;
+>dfu-programmer atmega16u2 reset;
 
 
 Étape 2 :
 Compiler et Upload le programme main.c sur l'arduino.
 
->gcc -o main main.c -Wall  (pas sur que ce soit nécessaire)
->make all
->make upload
+>gcc -o main main.c -Wall;  (pas sur que ce soit nécessaire)
+>make all;
+>make upload;
 
 (Remarque : On peut tester ce progrmme directement avec :
->minicom -8 -o -b 9600 -D /dev/ttyACM0                   )
+>minicom -8 -o -b 9600 -D /dev/ttyACM0;                 )
 
 Le programme est maintenant sur l'Arduino.
 
 Étape 3:
 Flasher la carte
 
->cd lufa-master/
->cd PolytechLille PAD/
->make all
->dfu-programmer atmega16u2 erase
->dfu-programmer atmega16u2 flash PAD.hex
->dfu-programmer atmega16u2 reset
+>cd lufa-master/;
+>cd PolytechLille PAD/;
+>make all;
+>dfu-programmer atmega16u2 erase;
+>dfu-programmer atmega16u2 flash PAD.hex;
+>dfu-programmer atmega16u2 reset;
 
 Étape 4:
 Compiler la partie 1 et l'exécuter.
->gcc -o exe init_USB.c -lusb-1.0 -Wall -Wextra
->./exe
+>gcc -o exe init_USB.c -lusb-1.0 -Wall -Wextra;
+>./exe;
 
 
 
