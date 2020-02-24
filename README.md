@@ -1,12 +1,10 @@
-READ ME
+# Tutorat système - Manette de jeu Arduino en USB
 
-Tutorat système
+par Rémi Guillomon et Guillaume Cremaschi
 
-Rémi Guillomon et Guillaume Cremaschi
+**Objectif :** Utiliser un shield Arduino de jeu broché sur une Arduino UNO et assurer la liaison USB à un PC.
 
-Objectif : Utiliser un shield Arduino de jeu et assurer la liaison USB à un PC.
-
-I. Compilations et exécution
+## I. Compilations et exécution
 
 Les compilations et l'exécution se déroulent en plusieurs étapes.
 
@@ -87,7 +85,7 @@ Vous pouvez lancer le programme en exécutant le fichier généré.
 ./exe
 ```
 
-II. Etat du programme
+## II. Etat du programme
 
 -  Ce qui fonctionne :
 
